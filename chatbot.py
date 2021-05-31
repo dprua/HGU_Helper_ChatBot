@@ -1,35 +1,5 @@
-'''
+
 #-*- coding: utf-8 -*-
-import telepot, sys
-from telepot.loop import MessageLoop
-from urllib import parse
-from urllib.request import urlopen
-import datetime
-import json
-#import Private		#API 토큰과 공공데이터포털 API 등을 별도의 py파일로 만들어 두었다.
-
-def handle(msg):
-    content_type, chat_type, chat_id = telepot.glance(msg)
-
-    if content_type == 'text':
-        if msg['text'] == '날씨':     #날씨라는 메시지가 도착했을 때 대답
-            bot.sendMessage(chat_id, '맑았으면 좋겠습니다')
-        else:                        #그 외에 다른 메시지가 도착했을 때 대답
-            bot.sendMessage(chat_id, '무슨 말인지 모르겠군요')
-
-#TOKEN = Private.TOKEN    #Bot API 토큰
-TOKEN = "1873396722:AAHsiIpBMSWEJySHxvbZbKPZDHNzVxOWRV0"
-bot = telepot.Bot(TOKEN)
-MessageLoop(bot, handle).run_as_thread()
-print ('Listening ...')
-
-# 프로그램을 계속 돌림
-while True:
-    input()
-'''
-
-
-    #-*- coding: utf-8 -*-
 import telepot, sys
 from telepot.loop import MessageLoop
 from urllib import parse
@@ -39,9 +9,38 @@ import json
 from urllib.parse import urlencode, unquote
 import requests
 import json
-#import Private
 
+city_id = '1839071'
+api_id = '0548f5ab9366bbb53502f37d6a80e10c'
+weather_condition_dic = {
+    "Thunderstorm" : '🌩 천둥번개가',
+    "Drizzle" : '🌦 가벼운 비가',
+    "Rain" : '☔️ 비가',
+    "Snow" : '☃️ 눈이',
+    "Mist": '💨 안개가',
+    "Smoke": '💨 매연이',
+    "Haze": '💨 안개가',
+    "Dust": '😷 미세먼지가',
+    "Clear": '☀️ 맑은 하늘이',
+    "Clouds": '☁️ 구름이'
+}
+weatherMessage_dict = {
+    "Thunderstorm": '오늘 같은 날 밖은 위험에요...⚡️⚡️',
+    "Drizzle": '우산 챙기기~ 🌂',
+    "Rain":
+    '오늘은 우산이 필수!! 친구들한테도 알려주세요!! 🌂',
+    "Snow":
+    '한동에서의 눈은 참 귀하답니다 눈구경해요!! ☃️',
+    "Mist": '오늘같은 날은 안전운전 해야되는거 아시죠?? 🛻',
+    "Smoke": '이런 날은 안나가는게 제일 좋아요!',
+    "Haze": '오늘같은 날은 안전운전 해야되는거 아시죠?? 🛻',
+    "Dust": '미세먼지 너무 싫어요ㅠㅠ 마스크 꼭 쓰기!😷',
+    "Clear":
+    '오늘은 날씨가 정말 좋아요 연인/친구들과 로잔에서 소풍하는거 어때요?☀️',
+    "Clouds": '오늘 같은 꿀꿀한 날에는 맛있는 치킨을 먹어봐요!😊',
+}
 def handle(msg):
+    global flag
     content_type, chat_type, chat_id = telepot.glance(msg)
 
     now = datetime.datetime.now()
@@ -82,123 +81,145 @@ def handle(msg):
     else:
         base_time = str(int_baseTime) + '00'
 
-    
-
-    print(base_time)
-
     completed_message = ""
 
-    url = "http://apis.data.go.kr/1360000/VilageFcstInfoService/getUltraSrtNcst"
-    queryString = "?" + urlencode(
-    {
-    "ServiceKey": unquote("nrGO9uiwFI98zVR52RcpZp7O8SA%2ByDp3E8pWfgCnkXt7BaJ4%2FcHeuIDOZluisW6hz1wSFam07fGuIRZmEO6lng%3D%3D"),
-    "base_date": now_date,
-    "base_time": str(now_time) + now_min,
-    "nx": 102, #사상구 괘법동
-    "ny": 96,
-    "numOfRows": "10",
-    "pageNo": 1,
-    "dataType": "JSON"
-    }
-    )
-    queryURL = url + queryString
-    print(queryURL)
-    response = requests.get(queryURL)
-    print("=== response json data start ===")
-    print(response.text)
-    print("=== response json data end ===")
-    print()
-
-    r_dict = json.loads(response.text)
-    r_response = r_dict.get("response")
-    header = r_response.get("header")
-    result = header.get("resultMsg")
-    print(result)
-    if(result == "NO_DATA"):
-        completed_message+="정보 업데이트 중입니다.😁\n 잠시 뒤에 이용해주세요!! ㅠ^ㅠ..."
-    else: 
-        
-        r_body = r_response.get("body")
-        r_items = r_body.get("items")
-        r_item = r_items.get("item")
-
-        result = {}
-        for item in r_item:
-            if(item.get("category") == "T1H"):
-                result = item
-                temp = float(result.get("obsrValue"))
-                if(temp < 5):
-                    var = "완전 추워요!! 바람막이 말고 롱패딩 입어요!!"
-                elif(temp < 10):
-                    var = "상당히 추워요 ㅠㅠ 바람막이는 필수!!!"
-                elif(temp < 20):
-                    var = "외투는 꼭 걸치고 밖으로 나오기!!"
-                elif(temp < 25):
-                    var = "날씨가 너무 좋아요~ 한한 할래요?"
-                elif(temp < 30):
-                    var = "반팔만 입어야 안더워요! 바람 잘 통하는 옷 입기!!"
-                else:
-                    var = "너무 너무 더워요,,, 손풍기 꼭 챙기세요!!"
-                completed_message +=str(result.get("baseTime")[:-2]+"시 한동대의 기온은 " + result.get("obsrValue") + "C 입니다." + '\n' + var + '\n')
-                break
-        for item in r_item:
-            if(item.get("category") == "RN1"):
-                result2 = item
-                temp = float(result2.get("obsrValue"))
-                if(temp == 0):
-                    var = "현재 한동대는 비가 오고 있지 않아요!! ^o^ !!"
-                elif(temp < 3):
-                    var = "현재 한동대에는 약한 비가 내리고 있어요... 우산 챙기기!!"
-                elif(temp < 15):
-                    var = "현재 한동대에는 꽤 비가 많이 내리고 있어요... 감기조심 ㅠ^ㅠ.."
-                elif(temp < 20):
-                    var = "현재 한동대에는 강한 비가 내리고 있습니다... 양말 조심,, 바지 조심 ㅠㅠ"
-                elif(temp < 31):
-                    var = "현재 한동대에는 매우 매우 강한 비가 내리고 있어요... 우리 살아서 만나요....!!!"
-                else:
-                    var = "현재 한동대에는 너무너무 많은 비가 내리고 있어요.. 그냥 긱사에 콕 박혀있어요!!!"
-                completed_message +=str(result2.get("baseTime")[:-2] +" 시 한동대의 강수량은 " + result2.get("obsrValue") + "mm" + ' 입니다.\n'+var+'\n')
-                break
-        for item in r_item:
-            if(item.get("category") == "REH"):
-                result = item
-                temp = float(result.get("obsrValue"))
-                completed_message +=str(result.get("baseTime")[:-2]+"시 한동대의 습도는 " + result.get("obsrValue") + "% 입니다." + '\n')
-                break
-        for item in r_item:
-            if(item.get("category") == "WSD"):
-                result = item
-                temp = float(result.get("obsrValue"))
-                completed_message +=str(result.get("baseTime")[:-2]+"시 한동대의 풍속은 " + result.get("obsrValue") + "m/s 입니다." + '\n')
-                break
-        # for item in r_item:
-        #     if(item.get("category") == "SKY"):
-        #         result = item
-        #         temp = float(result.get("obsrValue"))
-        #         completed_message +=str(result.get("baseTime")[:-2]+"시 한동대의 습도는 " + result.get("obsrValue") + "% 입니다." + '\n')
-        #         break
-
-    url = "http://smart.handong.edu/api/service/menu"
-    print(url)
-    response = requests.get(url)
-    h_dict = json.loads(response.text)
-    print(h_dict)
-    haksik = h_dict.get("haksik")
-    print(haksik)
     if content_type == 'text':
-        if msg['text'] == '날씨':
+        if msg['text'] in '날씨' or msg['text'] in "한동날씨" or msg['text'] in "한동 날씨":
+            url = 'http://api.openweathermap.org/data/2.5/weather?id='+city_id+'&appid='+api_id
+            response = requests.get(url)
+            print("=== response json data start ===")
+            print(response.text)
+            print("=== response json data end ===")
+            r_dict = json.loads(response.text)
+            weather = r_dict.get("weather")
+            weather = weather[0]
+            weather_1 = weather.get("main")
+            weather_2 =weather.get("description")
+            weather_info1 = weather_condition_dic[weather_1]
+            weather_info2 = weatherMessage_dict[weather_1]
+            main = r_dict.get("main")
+            temp = main.get("temp") - 273.15
+            temp_min = main.get("temp_min") - 273.15
+            temp_max = main.get("temp_max") - 273.15
+            feel = main.get("feels_like") - 273.15
+            humidity = main.get("humidity")
+            wind = r_dict.get("wind")
+            speed = wind.get("speed")
+
+            temp_int = int(temp)
+            temp_var = ""
+            if(temp_int < 5):
+                temp_var = "❄️바람막이 말고 롱패딩 입어요!!"
+            elif(temp_int < 10):
+                temp_var = "☃️바람막이는 필수!!!"
+            elif(temp_int < 20):
+                temp_var = "🌬외투는 꼭 걸치고 밖으로 나오기!!"
+            elif(temp_int < 25):
+                temp_var = "☀️날씨도 좋으니 한한 할래요?"
+            elif(temp_int < 30):
+                temp_var = "🔥반팔만 입어야 안더워요! 바람 잘 통하는 옷 입기!!"
+            else:
+                temp_var = "🔥🔥너무 너무 더워요,,, 손풍기 꼭 챙기세요!!"
+            
+            wind_var = ""
+            if(speed < 4.0):
+                wind_var = "😁약한 바람이 불고 있어요. 기분 좋게 바람 맞아봐요 :)"
+            elif(speed < 9.0):
+                wind_var = "😊약한 강한 바람이 불고 있어요. 조심하세요 :)"
+            elif(speed < 14.0):
+                wind_var = "😭강한 바람이 불고 있어요. 안다치게 조심하세요 !"
+            else:
+                wind_var = "☠️매우 강한 바람이 불고 있어요. 오늘 같은 날은 기숙사 밖으로 나가면 위험해요!"
+            
+            msg0 = "🌈오늘 한동의 기온은 " + "{0:.2f}".format(temp) + "도 이고 날씨는 " + weather_condition_dic[weather_1] +" 있는 날이에요.\n"
+            msg1 = "🧚‍♂️자세한 날씨로 체감기온은 " +"{0:.2f}".format(feel) +"도 이고 \n🧚‍♂️오늘 최저 온도는 "+"{0:.2f}".format(temp_min)+"도 이고 \n🧚‍♂️최고 온도는 "+"{0:.2f}".format(temp_max)+" 에요." \
+            "\n🧚‍♂️오늘 같은 날은 " + temp_var + '\n'
+            msg2 = weatherMessage_dict[weather_1]+'\n'
+            msg3 = "💦현재 습도는 " + str(humidity) + "%이고 \n🪁풍속은 " + str(speed)+ "m/s 로 현재 "+wind_var + '\n'
+            completed_message += msg0
+            completed_message += msg1
+            completed_message += msg2
+            completed_message += msg3
             bot.sendMessage(chat_id, completed_message)
+        elif msg['text'] in '학식' or msg['text'] in '학관' or msg['text'] in '학식메뉴' or msg['text'] in '학식 메뉴' or msg['text'] in '학생 식당':
+            url = "http://smart.handong.edu/api/service/menu"
+            print(url)
+            response = requests.get(url)
+            h_dict = json.loads(response.text)
+            #학식
+            haksik = h_dict.get("haksik")
+            mor = haksik[0].get("menu_kor")
+            mor = mor.replace("-원산지: 메뉴게시판 참조-","🍙아침🍙")
+            lun = haksik[1].get("menu_kor")
+            lun = lun.replace("-원산지: 메뉴게시판 참조-","🥗점심🥗")
+            din = haksik[2].get("menu_kor")
+            din = din.replace("-원산지: 메뉴게시판 참조","🥘저녁🥘")
+            completed_message += "🥗학생식당 메뉴🍱"
+            completed_message += '\n\n'
+            completed_message += mor
+            completed_message += '\n\n'
+            completed_message += lun
+            completed_message += '\n\n'
+            completed_message += din
+            completed_message += '\n\n'
+            bot.sendMessage(chat_id, completed_message)
+            flag = True
+        elif msg['text'] in '맘스' or msg['text'] in '맘스키친' or msg['text'] in '맘스 메뉴' or msg['text'] in '맘스키친 메뉴':
+            url = "http://smart.handong.edu/api/service/menu"
+            print(url)
+            response = requests.get(url)
+            h_dict = json.loads(response.text)
+            #맘스키친
+            moms = h_dict.get("moms")
+            mor = moms[0].get("menu_kor")
+            mor = "🍙아침🍙\n" + mor
+            lun = moms[1].get("menu_kor")
+            lun = "🥗점심🥗\n" + lun 
+            din = moms[2].get("menu_kor")
+            din = "🥘저녁🥘\n" + din
+
+            completed_message += "🥗맘스키친 메뉴🍱"
+            completed_message += '\n\n'
+            completed_message += mor 
+            completed_message += '\n'
+            completed_message += lun
+            completed_message += '\n'
+            completed_message += din
+            completed_message += '\n'
+            bot.sendMessage(chat_id, completed_message)
+            flag = True
+        elif msg['text'] in "사용법" or msg['text'] in "사용":
+            bot.sendMessage(chat_id, 
+            "\n😎SIRLab 한동 챗봇 입니다.🤸‍♀️"\
+            "\n😆챗봇 사용법은 다음과 같습니다.😆\n\n"\
+            "☀️현재 한동대 날씨가 궁금하면 🤫⁉️\n ☞ 날씨 / 한동날씨\n"\
+            "🍱오늘 학식 메뉴가 궁금하면 🤫⁉️\n ☞ 학식 / 학식 메뉴 \n"\
+            "🥘오늘 맘스키친 메뉴가 궁금하면 🤫⁉️ \n☞ 맘스 / 맘스 메뉴 \n"\
+            )
+            flag = True
+        elif msg['text'] in "/start":
+            pass
         else:
-            bot.sendMessage(chat_id, '무슨 말인지 모르겠군요')
+            bot.sendMessage(chat_id, '무슨 말인지 잘 모르겠어요😭\n📌사용법📌 이라고 물어봐주세요‼️')
+            flag = True
 
-TOKEN = "1873396722:AAHsiIpBMSWEJySHxvbZbKPZDHNzVxOWRV0"
-#TOKEN = Private.TOKEN    # 텔레그램으로부터 받은 Bot API 토큰
-#안드로이드 외부 편집 테스트
 
+TOKEN = "1773833039:AAFSgXt_7BmiYWCHtQ7DScUo2RPcEHhk_KM"
 bot = telepot.Bot(TOKEN)
+chat_id = 1856753360
+
 MessageLoop(bot, handle).run_as_thread()
 print ('Listening ...')
-
+global flag
+flag = True
 # Keep the program running.
+bot.sendMessage(chat_id, 
+            "\n😎SIRLab 한동 챗봇 입니다.🤸‍♀️"\
+            "\n😆챗봇 사용법은 다음과 같습니다.😆\n\n"\
+            "☀️현재 한동대 날씨가 궁금하면 🤫⁉️\n ☞ 날씨 / 한동날씨\n"\
+            "🍱오늘 학식 메뉴가 궁금하면 🤫⁉️\n ☞ 학식 / 학식 메뉴 \n"\
+            "🥘오늘 맘스키친 메뉴가 궁금하면 🤫⁉️ \n☞ 맘스 / 맘스 메뉴 \n"\
+            )
 while True:
     input()
+        
