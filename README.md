@@ -1,29 +1,49 @@
-# OSS_project
-MARKDOWN 정리, 실습 for README.md
+# OSS_Final_Project
+ 
+## 1. What does this project do?
+**SIRLab_ChatBot** is a Chetbot that provides useful information to students at Handong University. If you are curious about the school meal menu or the school weather, you can easily get information using this checkbot.
+This chatbot uses a Telegram application, and the server runs on Raspberry Pi based on Python. Since this chatbot uses Telegram, everyone can get information through this chatbot if the server is working.
+## 2. Why is this project useful?
+Food information and weather information are very necessary information for Handong University students. By using this service, people will be able to save their time in busy college life.
+## 3. How do I get started?
+Clone GitHub at the local location you want.
+After navigating to the Project folder,
+```swift
+cd OSS_project
+```
+Install the package required to operate the chatbot.
+```swift
+pip install -r requirement.txt
+```
+If the package is installed, perform the following procedure:
+1. Get a default api key from https://openweathermap.org/.
+2. Install Telegram and chat BotFather.
+2-1. Send a "/newbot" message to BotFather.
+2-2. Set the name of the chatbot.
+2-3. Write down your name again.
+2-4. Check the issued chatbot TOKEN value.
+3. Check your own chat_id value in the source code.
+```swift
+content_type, chat_type, chat_id = telepot.glance(msg)
+```
+4. Check city.list.json for the id of the city you want.
+5. Fill in the source code with the api key, TOKEN, chat_id, and city_id.
+```swift
+city_id = '1839071' # put cities id you want
+api_id = '' # put your api id
+TOKEN = '' # put your telegram token info
+chat_id = 1234 # put your chat_id here
+```
+6. Use the following command to operate the chatbot:
+```swift
+python3 chatbot.py
+```
 
-# 1. 제목(글머리) 작성
-# H1 제목  
-## H2 부제목
-### H3 소제목
-#### H4 제목4
-##### H5 제목5
-###### H6 제목6
+## 4. Where can I get more help, if I need it?
+If you need any help, please contact me via email at 21600277@handong.edu. 
+You can refer to the reference below in other ways.
+## 5. Presentation Video (YouTube) Link
 
-
-# 2. 번호 없는 리스트 작성
-* 리스트1
-  - 리스트2
-    + 리스트3
-    
-# 3. 번호 있는 리스트 작성
-1. 리스트1
-2. 리스트2
-3. 리스트3 
-
-# 4. 이텔릭체(기울어진 글씨) 작성
-*텍스트*
-
-# 5. 굵은 글씨 작성
 **텍스트**
 
 # 6. 인용
