@@ -86,21 +86,28 @@ def handle(msg):
     if content_type == 'text':
         if msg['text'] in '날씨' or msg['text'] in "한동날씨" or msg['text'] in "한동 날씨":
             url = 'http://api.openweathermap.org/data/2.5/weather?id='+city_id+'&appid='+api_id
+            url_temp = "http://api.openweathermap.org/data/2.5/weather?q=Gyeongsangbuk-do&appid="+api_id
             response = requests.get(url)
+            response_temp = requests.get(url_temp)
             print("=== response json data start ===")
             print(response.text)
             print("=== response json data end ===")
             r_dict = json.loads(response.text)
+            temp_dict = json.loads(response_temp.text)
+
             weather = r_dict.get("weather")
             weather = weather[0]
             weather_1 = weather.get("main")
             weather_2 =weather.get("description")
             weather_info1 = weather_condition_dic[weather_1]
             weather_info2 = weatherMessage_dict[weather_1]
+
             main = r_dict.get("main")
+            main_temp = temp_dict.get("main")
+
             temp = main.get("temp") - 273.15
-            temp_min = main.get("temp_min") - 273.15
-            temp_max = main.get("temp_max") - 273.15
+            temp_min = main_temp.get("temp_min") - 273.15
+            temp_max = main_temp.get("temp_max") - 273.15
             feel = main.get("feels_like") - 273.15
             humidity = main.get("humidity")
             wind = r_dict.get("wind")
@@ -132,7 +139,7 @@ def handle(msg):
                 wind_var = "☠️매우 강한 바람이 불고 있어요. 오늘 같은 날은 기숙사 밖으로 나가면 위험해요!"
             
             msg0 = "🌈오늘 한동의 기온은 " + "{0:.2f}".format(temp) + "도 이고 날씨는 " + weather_condition_dic[weather_1] +" 있는 날이에요.\n"
-            msg1 = "🧚‍♂️자세한 날씨로 체감기온은 " +"{0:.2f}".format(feel) +"도 이고 \n🧚‍♂️오늘 최저 온도는 "+"{0:.2f}".format(temp_min)+"도 이고 \n🧚‍♂️최고 온도는 "+"{0:.2f}".format(temp_max)+" 에요." \
+            msg1 = "🧚‍♂️자세한 날씨로 오늘 체감기온은 " +"{0:.2f}".format(feel) +"도 이고 \n🧚‍♂️최저 온도는 "+"{0:.2f}".format(temp_min)+"도 이고 \n🧚‍♂️최고 온도는 "+"{0:.2f}".format(temp_max)+"도 에요." \
             "\n🧚‍♂️오늘 같은 날은 " + temp_var + '\n'
             msg2 = weatherMessage_dict[weather_1]+'\n'
             msg3 = "💦현재 습도는 " + str(humidity) + "%이고 \n🪁풍속은 " + str(speed)+ "m/s 로 현재 "+wind_var + '\n'
