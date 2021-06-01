@@ -1,4 +1,4 @@
-# OSS_Final_Project
+# SIRLab ChatBot
  
 ## 1. What does this project do?
 **SIRLab_ChatBot** is a Chetbot that provides useful information to students at Handong University. If you are curious about the school meal menu or the school weather, you can easily get information using this checkbot.
@@ -18,10 +18,15 @@ pip install -r requirement.txt
 If the package is installed, perform the following procedure:
 1. Get a default api key from https://openweathermap.org/.
 2. Install Telegram and chat BotFather.
-2-1. Send a "/newbot" message to BotFather.
-2-2. Set the name of the chatbot.
-2-3. Write down your name again.
-2-4. Check the issued chatbot TOKEN value.
+
+     a. Send a "/newbot" message to BotFather.
+
+     b. Set the name of the chatbot.
+
+     c. Write down your name again.
+
+     d. Check the issued chatbot TOKEN value.
+
 3. Check your own chat_id value in the source code.
 ```swift
 content_type, chat_type, chat_id = telepot.glance(msg)
@@ -41,84 +46,16 @@ python3 chatbot.py
 
 ## 4. Where can I get more help, if I need it?
 If you need any help, please contact me via email at 21600277@handong.edu. 
+
 You can refer to the reference below in other ways.
 ## 5. Presentation Video (YouTube) Link
 
-**텍스트**
+## 6. Operation screen
+<img src="https://user-images.githubusercontent.com/34247631/120386061-1ebfd880-c363-11eb-9187-c64f935c7666.png"  width="300" height="700"><img src="https://user-images.githubusercontent.com/34247631/120386491-aa396980-c363-11eb-9d13-b074967dc320.png"  width="500" height="700">
+<img src="https://user-images.githubusercontent.com/34247631/120386752-00a6a800-c364-11eb-9a8c-8caac4b78fe5.png"  width="300" height="300">
 
-# 6. 인용
-> 인용1
+## 7. Reference
+**1. Openweathermap-api =>** 
+[Openweathermap-api](https://openweathermap.org/api)
 
-> 인용2
->> 인용안의 인용
-
-# 7. 수평선 넣기
-
----
-  
-# 8. 링크 달기
-(1) 인라인 링크  
-
-[블로그 주소](https://lsh424.tistory.com/)
-
-(2) 참조 링크  
-
-[블로그 주소][blog]
-
-[blog]: https://lsh424.tistory.com/
-
-# 9. 이미지 추가하기
-![이탈리아 포지타노](https://user-images.githubusercontent.com/31477658/85016059-f962aa80-b1a3-11ea-8c91-dacba2666b78.jpeg)
-
-### 이미지 사이즈 조절
-<img src="https://user-images.githubusercontent.com/31477658/85016059-f962aa80-b1a3-11ea-8c91-dacba2666b78.jpeg"  width="700" height="370">
-
-### 이미지 파일로 추가하기
-<img src="Capri_Island.jpeg" width="700">
-
-# 10. 코드블럭 추가하기
-
-```swift
-public struct CGSize {
-  public var width: CGFloat
-  public var heigth: CGFloat
-  ...
-}
-```
-
-# etc
-
-**텍스트 굵게**  
-~~텍스트 취소선~~
-
-### [개행]  
-
-스페이스바를 통한 문장개행  
-스페이스바를 통한 문장개행  
-
-br태그를 사용한 문장개행
-<br>
-<br>
-br태그를 사용한 문장개행
-
-
-### [체크박스]
-
-다음과 같이 체크박스를 표현 할 수 있습니다. 
-* [x] 체크박스
-* [ ] 빈 체크박스
-* [ ] 빈 체크박스
-
-### [이모지 넣기]
-❤️💜💙🤍
-
-### [표 넣기]
-|왼쪽 정렬|가운데 정렬|오른쪽 정렬| 
-|:---|:---:|---:| 
-|내용1|내용2|내용3| 
-|내용1|내용2|내용3| 
-
-<br>
-
-### 정리내용
-[정리 내용 보기](https://lsh424.tistory.com/37)
+**2. Handong-menu-api =>** [Handong-menu-api](http://smart.handong.edu/api/service/menu)
