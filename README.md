@@ -1,7 +1,7 @@
-# SIRLab ChatBot
+# HGU Helper ChatBot
  
 ## 1. What does this project do?
-**SIRLab_ChatBot** is a Chetbot that provides useful information to students at Handong University. If you are curious about the school meal menu or the school weather, you can easily get information using this checkbot.
+**HGU Helper ChatBot** is a Chetbot that provides useful information to students at Handong University. If you are curious about the school meal menu or the school weather, you can easily get information using this checkbot.
 This chatbot uses a Telegram application, and the server runs on Raspberry Pi based on Python. Since this chatbot uses Telegram, everyone can get information through this chatbot if the server is working.
 ## 2. Why is this project useful?
 Food information and weather information are very necessary information for Handong University students. By using this service, people will be able to save their time in busy college life.
