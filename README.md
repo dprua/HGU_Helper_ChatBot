@@ -1,10 +1,10 @@
 # HGU Helper ChatBot
  
 ## 1. What does this project do?
-**HGU Helper ChatBot** is a Chetbot that provides useful information to students at Handong University. If you are curious about the school meal menu or the school weather, you can easily get information using this checkbot.
+**HGU Helper ChatBot** is a Chetbot that provides useful information to students at Handong University. If you are curious about the school meal menu or the school weather and COVID-19 information of Korea, you can easily get information using this checkbot.
 This chatbot uses a Telegram application, and the server runs on Raspberry Pi based on Python. Since this chatbot uses Telegram, everyone can get information through this chatbot if the server is working.
 ## 2. Why is this project useful?
-Food information and weather information are very necessary information for Handong University students. By using this service, people will be able to save their time in busy college life.
+Food information and weather information are very necessary information for Handong University students. And COVID-19 information is also very important. By using this service, people will be able to save their time in busy college life.
 ## 3. How do I get started?
 Clone GitHub at the local location you want.
 After navigating to the Project folder,
@@ -59,3 +59,5 @@ You can refer to the reference below in other ways.
 [Openweathermap-api](https://openweathermap.org/api)
 
 **2. Handong-menu-api =>** [Handong-menu-api](http://smart.handong.edu/api/service/menu)
+
+**3. COVID-19-api =>** [COVID-19-api](https://api.corona-19.kr/)
